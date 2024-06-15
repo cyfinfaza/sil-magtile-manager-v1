@@ -90,7 +90,7 @@
       alert("Invalid number of cols: " + cols);
       cols = 0;
     }
-    deviceCols = rows;
+    deviceCols = cols;
     resp = await comm.readAddressList();
     if (resp.status != "success") {
       alert("Failed to read address list: " + resp.data);
@@ -103,6 +103,7 @@
     coilStates = Array(deviceRows * 3)
       .fill(0)
       .map(() => Array(deviceCols * 3).fill(0));
+    console.log("coilStates", deviceRows, deviceCols, coilStates);
   }
 
   async function writeConfig() {
