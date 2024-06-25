@@ -146,6 +146,10 @@
     }
   }
 
+  let quickInc = 100;
+
+  let setVal = 0;
+
   onMount(() => {
     return async () => {
       await comm.disconnect();
@@ -208,7 +212,7 @@
     <div class="gridControl">
       <h3>Grid Control</h3>
       {#if selectedCoil != null}
-        <p style="display: flex; align-items:center;">
+        <p style="display: flex; align-items: center; gap:4px;">
           {selectedCoil[0]}, {selectedCoil[1]}
           <input
             type="range"
@@ -225,6 +229,47 @@
             bind:value={coilStates[selectedCoil[0]][selectedCoil[1]]}
           />
           {coilStates[selectedCoil[0]][selectedCoil[1]]}
+        </p>
+        <p style="display: flex; align-items: center; gap:4px;">
+          Increment:
+          <button
+            on:click={() => {
+              coilStates[selectedCoil[0]][selectedCoil[1]] += quickInc;
+              updateCoilPower(
+                selectedCoil[0],
+                selectedCoil[1],
+                coilStates[selectedCoil[0]][selectedCoil[1]]
+              );
+            }}>+</button
+          >
+          <input type="number" style="width: 64px;" bind:value={quickInc} />
+          <button
+            on:click={() => {
+              coilStates[selectedCoil[0]][selectedCoil[1]] -= quickInc;
+              updateCoilPower(
+                selectedCoil[0],
+                selectedCoil[1],
+                coilStates[selectedCoil[0]][selectedCoil[1]]
+              );
+            }}>-</button
+          >
+        </p>
+        <p style="display: flex; align-items: center; gap:4px;">
+          Set value: <input
+            type="number"
+            bind:value={setVal}
+            style="width: 64px;"
+          />
+          <button
+            on:click={() => {
+              coilStates[selectedCoil[0]][selectedCoil[1]] = setVal;
+              updateCoilPower(
+                selectedCoil[0],
+                selectedCoil[1],
+                coilStates[selectedCoil[0]][selectedCoil[1]]
+              );
+            }}>Set</button
+          >
         </p>
       {/if}
       <div class="ctrlGrid">
