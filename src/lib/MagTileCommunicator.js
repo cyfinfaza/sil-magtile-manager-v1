@@ -107,6 +107,14 @@ class ArduinoController {
     return await this.sendCommand("scan_addresses");
   }
 
+  async blinkallStart() {
+    return await this.sendCommand("blinkall_start");
+  }
+
+  async blinkallStop() {
+    return await this.sendCommand("blinkall_stop");
+  }
+
   async testLedEnable(address) {
     return await this.sendCommand(`test_led_enable ${address}`);
   }

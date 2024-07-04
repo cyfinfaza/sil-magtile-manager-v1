@@ -179,6 +179,12 @@
           {addr}
         </p>
       {/each}
+      <!-- blinkall_start and stop -->
+      <p>Blink all outputs on <br />all scanned tiles &darr;</p>
+      <p>
+        <button on:click={() => comm.blinkallStart()}>🟢 Start</button>
+        <button on:click={() => comm.blinkallStop()}>🛑 Stop</button>
+      </p>
     </div>
     <div class="gridConfig">
       <h3>Configure Grid</h3>
