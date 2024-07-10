@@ -165,6 +165,7 @@
     <button on:click={readConfig}>⬇️ Read Config</button>
     <button on:click={writeConfig}>⬆️ Test Config</button>
     <button on:click={storeToEeprom}>💾 Store Config to EEPROM</button>
+    <small>{__COMMIT_HASH__}</small>
   </div>
   <div class="panels">
     <div class="scanAddr">
@@ -333,6 +334,9 @@
   .panels {
     display: flex;
     gap: 8px;
+  }
+  .topBar {
+    align-items: flex-end;
   }
   .panels {
     gap: 8px;
