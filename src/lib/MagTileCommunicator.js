@@ -3,6 +3,7 @@ class ArduinoController {
     this.port = null;
     this.writer = null;
     this.reader = null;
+    this.ondisconnect = null;
   }
 
   async connect() {
@@ -12,6 +13,12 @@ class ArduinoController {
 
       this.writer = this.port.writable.getWriter();
       this.reader = this.port.readable.getReader();
+
+      this.port.ondisconnect = (event) => {
+        if (this.ondisconnect) {
+          this.ondisconnect(event);
+        }
+      };
 
       // Flush initial message from Arduino
       await this.readUntilNewline();

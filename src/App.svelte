@@ -20,9 +20,20 @@
   window.comm = comm;
 
   async function connect() {
+    if (connected) {
+      await comm.disconnect();
+      connected = false;
+      return;
+    }
     let resp = await comm.connect();
     if (resp.status == "success") {
       connected = true;
+      comm.ondisconnect = () => {
+        connected = false;
+        // alert("Serial link lost.");
+        // if (confirm("Serial link lost. Refresh page?"))
+        //   window.location.reload();
+      };
     } else {
       alert("Failed to connect: " + resp.data);
     }
@@ -159,21 +170,28 @@
 
 <main>
   <div class="topBar">
-    <button on:click={connect} disabled={connected}
-      >{connected ? "🔌 Connected" : "🔌 Connect"}</button
+    <div
+      style="height: 2em; width: 2em; border-radius: 50%; align-self: center;"
+      style:background-color={connected ? "#0f0" : "#f00"}
+    ></div>
+    <button on:click={connect}
+      >{connected ? "🔌 Disconnect" : "🔌 Connect"}</button
     >
-    <button on:click={readConfig}>⬇️ Read Config</button>
-    <button on:click={writeConfig}>⬆️ Test Config</button>
-    <button on:click={storeToEeprom}>💾 Store Config to EEPROM</button>
+    <button on:click={readConfig} disabled={!connected}>⬇️ Read Config</button>
+    <button on:click={writeConfig} disabled={!connected}>⬆️ Test Config</button>
+    <button on:click={storeToEeprom} disabled={!connected}
+      >💾 Store Config to EEPROM</button
+    >
     <small>{__COMMIT_HASH__}</small>
   </div>
   <div class="panels">
     <div class="scanAddr">
       <h3>Scan for MagTiles</h3>
-      <button on:click={doScan}>🔍 Scan now</button>
+      <button on:click={doScan} disabled={!connected}>🔍 Scan now</button>
       {#each scannedAddrs as addr}
         <p>
           <button
+            disabled={!connected}
             class:lightOn={ledStates[addr]}
             on:click={() => toggleLed(addr)}>💡</button
           >
@@ -183,8 +201,12 @@
       <!-- blinkall_start and stop -->
       <p>Blink all outputs on <br />all scanned tiles &darr;</p>
       <p>
-        <button on:click={() => comm.blinkallStart()}>🟢 Start</button>
-        <button on:click={() => comm.blinkallStop()}>🛑 Stop</button>
+        <button disabled={!connected} on:click={() => comm.blinkallStart()}
+          >🟢 Start</button
+        >
+        <button disabled={!connected} on:click={() => comm.blinkallStop()}
+          >🛑 Stop</button
+        >
       </p>
     </div>
     <div class="gridConfig">
@@ -204,6 +226,7 @@
                   bind:value={addrList[row * cols + col]}
                 />
                 <button
+                  disabled={!connected}
                   style="border-radius: 0 0 8px 8px; font-size: 0.7em; padding: 4px;"
                   on:click={() => toggleLed(addrList[row * cols + col])}
                   class:lightOn={ledStates[addrList[row * cols + col]]}
@@ -241,18 +264,27 @@
           Increment:
           <button
             on:click={() => {
-              coilStates[selectedCoil[0]][selectedCoil[1]] += quickInc;
+              if (
+                coilStates[selectedCoil[0]][selectedCoil[1]] + quickInc >
+                4095
+              )
+                coilStates[selectedCoil[0]][selectedCoil[1]] = 4095;
+              else coilStates[selectedCoil[0]][selectedCoil[1]] += quickInc;
               updateCoilPower(
                 selectedCoil[0],
                 selectedCoil[1],
                 coilStates[selectedCoil[0]][selectedCoil[1]]
               );
-            }}>+</button
+            }}
+            disabled={!connected}>+</button
           >
           <input type="number" style="width: 64px;" bind:value={quickInc} />
           <button
+            disabled={!connected}
             on:click={() => {
-              coilStates[selectedCoil[0]][selectedCoil[1]] -= quickInc;
+              if (coilStates[selectedCoil[0]][selectedCoil[1]] < quickInc)
+                coilStates[selectedCoil[0]][selectedCoil[1]] = 0;
+              else coilStates[selectedCoil[0]][selectedCoil[1]] -= quickInc;
               updateCoilPower(
                 selectedCoil[0],
                 selectedCoil[1],
@@ -268,6 +300,7 @@
             style="width: 64px;"
           />
           <button
+            disabled={!connected}
             on:click={() => {
               coilStates[selectedCoil[0]][selectedCoil[1]] = setVal;
               updateCoilPower(
@@ -278,6 +311,7 @@
             }}>Set</button
           >
           <button
+            disabled={!connected}
             on:click={() => {
               if (coilStates[selectedCoil[0]][selectedCoil[1]] == 0)
                 coilStates[selectedCoil[0]][selectedCoil[1]] = setVal;
@@ -324,6 +358,11 @@
 </main>
 
 <style lang="scss">
+  button:disabled {
+    background-color: #0002;
+    color: #0004;
+    pointer-events: none;
+  }
   main {
     display: flex;
     flex-direction: column;
