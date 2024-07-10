@@ -276,6 +276,18 @@
               );
             }}>Set</button
           >
+          <button
+            on:click={() => {
+              if (coilStates[selectedCoil[0]][selectedCoil[1]] == 0)
+                coilStates[selectedCoil[0]][selectedCoil[1]] = setVal;
+              else coilStates[selectedCoil[0]][selectedCoil[1]] = 0;
+              updateCoilPower(
+                selectedCoil[0],
+                selectedCoil[1],
+                coilStates[selectedCoil[0]][selectedCoil[1]]
+              );
+            }}>Toggle</button
+          >
         </p>
       {/if}
       <div class="ctrlGrid">
