@@ -188,16 +188,20 @@
     <div class="scanAddr">
       <h3>Scan for MagTiles</h3>
       <button on:click={doScan} disabled={!connected}>🔍 Scan now</button>
-      {#each scannedAddrs as addr}
-        <p>
-          <button
-            disabled={!connected}
-            class:lightOn={ledStates[addr]}
-            on:click={() => toggleLed(addr)}>💡</button
-          >
-          {addr}
-        </p>
-      {/each}
+      <div
+        style="display: flex; flex-wrap: wrap; gap: 12px; max-width: 300px; overflow: auto;"
+      >
+        {#each scannedAddrs as addr}
+          <p>
+            <button
+              disabled={!connected}
+              class:lightOn={ledStates[addr]}
+              on:click={() => toggleLed(addr)}>💡</button
+            >
+            <code>{addr}</code>
+          </p>
+        {/each}
+      </div>
       <!-- blinkall_start and stop -->
       <p>Blink all outputs on <br />all scanned tiles &darr;</p>
       <p>
@@ -368,6 +372,9 @@
     flex-direction: column;
     gap: 8px;
     padding: 8px;
+    max-height: 100vh;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   .topBar,
   .panels {
@@ -379,6 +386,7 @@
   }
   .panels {
     gap: 8px;
+    max-height: 100%;
     > * {
       background-color: #0002;
       padding: 8px;
@@ -392,12 +400,16 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
+      overflow: hidden;
     }
+    overflow: hidden;
   }
   .addrGrid {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    overflow: auto;
+    max-width: 100%;
     .addrGridRow {
       display: flex;
       gap: 8px;
@@ -412,6 +424,9 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overflow: auto;
+    max-width: 100%;
+    align-items: flex-start;
     .ctrlGridRow {
       display: flex;
       gap: 4px;
@@ -421,6 +436,7 @@
       padding: 4px;
       width: 2em;
       height: 2em;
+      // flex: 0;
       border-radius: 50%;
       text-align: center;
       display: flex;
