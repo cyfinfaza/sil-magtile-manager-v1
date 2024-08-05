@@ -178,9 +178,11 @@
       >{connected ? "🔌 Disconnect" : "🔌 Connect"}</button
     >
     <button on:click={readConfig} disabled={!connected}>⬇️ Read Config</button>
-    <button on:click={writeConfig} disabled={!connected}>⬆️ Test Config</button>
+    <button on:click={writeConfig} disabled={!connected}
+      >⬆️ Send Config to RAM</button
+    >
     <button on:click={storeToEeprom} disabled={!connected}
-      >💾 Store Config to EEPROM</button
+      >💾 Store RAM Config to EEPROM</button
     >
     <small>{__COMMIT_HASH__}</small>
   </div>
