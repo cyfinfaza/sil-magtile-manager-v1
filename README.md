@@ -4,13 +4,13 @@ This program allows for configuration and testing of Rutgers SIL MagTile devices
 
 ## Run Online
 
-MagTile Manager is available online. Simply visit [https://magtile-manager.cy2.me/](). If the website does not work or you need to use the tool offline, you can run it locally.
+MagTile Manager is available online. Simply visit [https://magtile-manager.cy2.me/](https://magtile-manager.cy2.me/). If the website does not work or you need to use the tool offline, you can run it locally.
 
 ## Run Locally
 
-Ensure NodeJS is installed. [https://nodejs.org/]()
+Ensure NodeJS is installed. [https://nodejs.org/](https://nodejs.org/)
 
-Ensure `git` is intalled. [https://git-scm.com/]()
+Ensure `git` is intalled. [https://git-scm.com/](https://git-scm.com/)
 
 Clone this repository
 
