@@ -36,4 +36,4 @@ Run the deveopment server
 npm run dev
 ```
 
-Then visit [http://localhost:5173]() in your browser.
+Then visit [http://localhost:5173](http://localhost:5173) in your browser.
